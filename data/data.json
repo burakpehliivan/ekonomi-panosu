@@ -1,10 +1,10 @@
 {
- "generated": "2026-10-21T14:27:16+00:00",
+ "generated": "2026-10-21T20:19:13+00:00",
  "ind": {
   "fed": {
    "label": "FED hedef faiz aralığı",
    "url": "https://fred.stlouisfed.org/series/DFEDTARU",
-   "error": "HTTPError: 400 Client Error: Bad Request for url: https://api.stlouisfed.org/fred/series/observations?series_id=DFEDTARU&api_key=8089652b1c6b7a2c297d13112a8c8ece+&file_type=json&sort_order=desc&limit=16"
+   "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
   },
   "policy": {
    "label": "TCMB politika faizi (1 hafta repo)",
@@ -14,7 +14,7 @@
     "since": "2026-01-23"
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-21T14:27:08+00:00",
+   "last_ok": "2026-10-21T20:19:02+00:00",
    "error": null
   },
   "ticari": {
@@ -25,7 +25,7 @@
     "series": "TP.KTF17"
    },
    "data_date": "2026-10-09",
-   "last_ok": "2026-10-21T14:27:08+00:00",
+   "last_ok": "2026-10-21T20:19:02+00:00",
    "error": null
   },
   "ihtiyac": {
@@ -36,7 +36,7 @@
     "series": "TP.KTF10"
    },
    "data_date": "2026-10-09",
-   "last_ok": "2026-10-21T14:27:08+00:00",
+   "last_ok": "2026-10-21T20:19:02+00:00",
    "error": null
   },
   "konut": {
@@ -47,7 +47,7 @@
     "series": "TP.KTF12"
    },
    "data_date": "2026-10-09",
-   "last_ok": "2026-10-21T14:27:08+00:00",
+   "last_ok": "2026-10-21T20:19:02+00:00",
    "error": null
   },
   "tcmb_usd": {
@@ -58,7 +58,7 @@
     "sell": 49.6015
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-21T14:27:08+00:00",
+   "last_ok": "2026-10-21T20:19:02+00:00",
    "error": null
   },
   "eurusd": {
@@ -90,18 +90,18 @@
     ]
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-21T14:27:08+00:00",
+   "last_ok": "2026-10-21T20:19:02+00:00",
    "error": null
   },
   "vix": {
    "label": "VIX",
    "url": "https://fred.stlouisfed.org/series/VIXCLS",
-   "error": "HTTPError: 400 Client Error: Bad Request for url: https://api.stlouisfed.org/fred/series/observations?series_id=VIXCLS&api_key=8089652b1c6b7a2c297d13112a8c8ece+&file_type=json&sort_order=desc&limit=21"
+   "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
   },
   "spx": {
    "label": "S&P 500 EMA 9/14",
    "url": "https://fred.stlouisfed.org/series/SP500",
-   "error": "HTTPError: 400 Client Error: Bad Request for url: https://api.stlouisfed.org/fred/series/observations?series_id=SP500&api_key=8089652b1c6b7a2c297d13112a8c8ece+&file_type=json&sort_order=desc&limit=415"
+   "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
   },
   "kapalicarsi": {
    "label": "Harem Altın USD (Altınapi)",
