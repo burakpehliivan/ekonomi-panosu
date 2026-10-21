@@ -1,22 +1,56 @@
 <!doctype html>
 <html lang="tr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Ekonomi panosu</title>
+<meta name="theme-color" content="#0b2540">
+<title>Ekonomi Panosu</title>
 <style>
-:root{--bg:#eef1f4;--card:#fff;--ink:#17202a;--mut:#5d6b7a;--line:#d9e0e7;--ok:#17744a;--warn:#a05a00;--bad:#b3261e;--tint:#fdf0d2;color-scheme:light dark}
-@media(prefers-color-scheme:dark){:root{--bg:#10151b;--card:#18202a;--ink:#e8edf2;--mut:#93a1b0;--line:#2a3542;--ok:#5fd39a;--warn:#f0b35a;--bad:#ff8a80;--tint:#3a2f12}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;padding:max(14px,env(safe-area-inset-top)) 14px max(24px,env(safe-area-inset-bottom))}
-main{max-width:560px;margin:0 auto}h1{font-size:1.25rem;margin:4px 0 2px}.sub{color:var(--mut);font-size:.85rem;margin:0 0 14px}
-.c{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:6px;padding:12px 14px;margin:0 0 10px}
-.c.ok{border-left-color:var(--ok)}.c.warn{border-left-color:var(--warn)}.c.bad{border-left-color:var(--bad)}
-h2{font-size:.95rem;font-weight:600;margin:0 0 6px;color:var(--mut)}
-.v{font-size:1.7rem;font-weight:650;font-variant-numeric:tabular-nums;margin:0}.s{font-weight:600;margin:2px 0 6px}
-.ok .s{color:var(--ok)}.warn .s{color:var(--warn)}.bad .s{color:var(--bad)}
-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}td{padding:3px 0;border-top:1px solid var(--line)}td:last-child{text-align:right}
-.f{font-size:.76rem;color:var(--mut);margin:8px 0 0}.f a{color:inherit}.old{background:var(--tint);padding:0 3px;border-radius:3px}
-.err{display:block;margin-top:4px;color:var(--bad)}.note{font-size:.78rem;color:var(--mut);margin:14px 2px}
-</style></head><body><main>
-<h1>Ekonomi panosu</h1><p class="sub" id="gen">Yükleniyor…</p><div id="app"></div>
+:root{--bg:#eef2f7;--card:#fff;--ink:#101c2b;--mut:#5a6a7e;--line:#e0e6ee;--ok:#0f8a56;--warn:#b86200;--bad:#d03a2f;--okbg:#e0f5ea;--warnbg:#fdeed2;--badbg:#fde6e3;--acc:#2563eb;--faiz:#6366f1;--doviz:#0d9488;--piyasa:#f59e0b;--risk:#e11d48;--sh:0 1px 2px rgba(11,37,64,.06),0 8px 22px rgba(11,37,64,.07);color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--bg:#0a0f16;--card:#131b26;--ink:#e8eef6;--mut:#8d9db1;--line:#243040;--ok:#4cd39a;--warn:#f3b355;--bad:#ff8c80;--okbg:#10301f;--warnbg:#38290d;--badbg:#3b1815;--acc:#6ea0ff;--sh:none}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+header{background:radial-gradient(900px 300px at 85% -20%,rgba(56,189,248,.35),transparent 60%),radial-gradient(700px 300px at 0% 120%,rgba(99,102,241,.4),transparent 60%),linear-gradient(135deg,#071a2f,#0f3560);color:#fff;padding:calc(24px + env(safe-area-inset-top)) 16px 30px}
+.in,main{max-width:900px;margin:0 auto}
+.eyebrow{margin:0;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+h1{margin:4px 0 4px;font-size:1.8rem;font-weight:700;letter-spacing:-.02em}
+.sub{margin:0 0 18px;font-size:.78rem;opacity:.7}
+.hero{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:640px){.hero{grid-template-columns:repeat(4,1fr)}}
+.t{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:11px 13px;backdrop-filter:blur(6px)}
+.t span{display:block;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+.t b{display:block;font-size:1.35rem;font-weight:650;font-variant-numeric:tabular-nums;margin-top:2px}
+main{padding:4px 14px calc(30px + env(safe-area-inset-bottom))}
+h2.g{display:flex;align-items:center;gap:10px;margin:28px 2px 12px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.gi{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:.95rem;font-weight:700;background:var(--a);box-shadow:0 4px 10px -3px var(--a)}
+h2.g::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.faiz{--a:var(--faiz)}.doviz{--a:var(--doviz)}.piyasa{--a:var(--piyasa)}.risk{--a:var(--risk)}
+.c{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 16px 13px;box-shadow:var(--sh);overflow:hidden}
+.c::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--a)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px}
+h3{margin:0;font-size:.82rem;font-weight:600;color:var(--mut)}
+.pill{font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.bad .pill{background:var(--badbg);color:var(--bad)}.warn .pill{background:var(--warnbg);color:var(--warn)}
+.v{font-size:2rem;font-weight:650;letter-spacing:-.025em;font-variant-numeric:tabular-nums;margin:0;line-height:1.2}
+.s{display:inline-flex;align-items:center;gap:6px;font-weight:650;font-size:.82rem;margin:4px 0 8px;padding:3px 10px;border-radius:8px;background:var(--bg)}
+.ok .s{color:var(--ok);background:var(--okbg)}.warn .s{color:var(--warn);background:var(--warnbg)}.bad .s{color:var(--bad);background:var(--badbg)}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.duo div{background:var(--bg);border-radius:10px;padding:8px 11px}
+.duo span{display:block;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.duo b{font-size:1.25rem;font-weight:650;font-variant-numeric:tabular-nums}
+.sp{display:block;width:100%;height:46px;margin:8px 0 2px}
+.gauge{position:relative;height:9px;border-radius:99px;margin:16px 4px 6px}
+.mk{position:absolute;top:-5px;width:5px;height:19px;border-radius:3px;background:var(--ink);border:2px solid var(--card);transform:translateX(-50%);box-sizing:content-box}
+.tk{display:flex;justify-content:space-between;font-size:.66rem;color:var(--mut);margin:0 2px 4px;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.88rem;margin-top:4px}
+td{padding:5px 0;border-top:1px solid var(--line)}td:first-child{color:var(--mut)}td:last-child{text-align:right;font-weight:550}
+.up{color:var(--bad)}.dn{color:var(--ok)}.nu{color:var(--acc)}
+.f{font-size:.71rem;color:var(--mut);margin:10px 0 0;line-height:1.45}.f a{color:inherit}
+.old{background:var(--warnbg);color:var(--warn);padding:0 4px;border-radius:3px}
+.err{display:block;margin-top:5px;color:var(--bad)}
+.note{font-size:.73rem;color:var(--mut);margin:28px 2px 0;padding-top:14px;border-top:1px solid var(--line)}
+</style></head><body>
+<header><div class="in"><p class="eyebrow">Kişisel gösterge paneli</p><h1>Ekonomi Panosu</h1><p class="sub" id="gen">Yükleniyor…</p><div class="hero" id="hero"></div></div></header>
+<main><div id="app"></div>
 <p class="note">CDS ve Ekonomik Güven eşikleri kişisel sınıflandırmadır, evrensel standart değildir. CDS tek başına kur tahmini üretmez, diğer göstergelerle birlikte okunur. Eksik veri tahminle doldurulmaz. PMI bu sürümde yok.</p>
 </main>
 <script>
@@ -25,44 +59,57 @@ const n=(x,d=2)=>Number(x).toLocaleString('tr-TR',{minimumFractionDigits:d,maxim
 const age=d=>d?Math.floor((Date.now()-new Date(d+'T12:00:00'))/864e5):0;
 const tr=d=>d?d.split('-').reverse().join('.'):'-';
 const sg=x=>(x>0?'+':'')+n(x);
-const card=(t,cls,b,f)=>`<section class="c ${cls}"><h2>${t}</h2>${b}<p class="f">${f}</p></section>`;
+const ar=x=>x>0?'▲':x<0?'▼':'●';
+const card=(t,cls,b,f,tag)=>`<section class="c ${cls}"><div class="top"><h3>${t}</h3>${tag?`<span class="pill">${tag}</span>`:''}</div>${b}<p class="f">${f}</p></section>`;
 const empty='<p class="v">Veri yok</p>';
+function spark(v,c){if(v.length<2)return'';const mn=Math.min(...v),r=(Math.max(...v)-mn)||1,w=116/(v.length-1);
+ const p=v.map((y,i)=>[+(i*w+2).toFixed(1),+(36-((y-mn)/r)*30).toFixed(1)]),d=p.map(q=>q.join(',')).join(' '),l=p[p.length-1];
+ return `<svg class="sp" viewBox="0 0 120 42" preserveAspectRatio="none" aria-hidden="true"><polygon points="2,40 ${d} 118,40" fill="${c}" opacity=".14"/><polyline points="${d}" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="${l[0]}" cy="${l[1]}" r="3" fill="${c}"/></svg>`}
+const gauge=(bg,pos,ticks)=>`<div class="gauge" style="background:${bg}"><i class="mk" style="left:${Math.max(0,Math.min(100,pos))}%"></i></div><div class="tk">${ticks.map(t=>`<span>${t}</span>`).join('')}</div>`;
 function foot(r,lim){const old=age(r.data_date)>lim;
- return `<a href="${r.url}">Kaynak</a>, veri tarihi <b class="${old?'old':''}">${tr(r.data_date)}</b>${old?' (eski)':''}, son başarılı güncelleme ${r.last_ok?new Date(r.last_ok).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'yok'}`
+ return `<a href="${r.url}">Kaynak</a> · veri tarihi <b class="${old?'old':''}">${tr(r.data_date)}</b>${old?' (eski)':''} · son başarılı güncelleme ${r.last_ok?new Date(r.last_ok).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'yok'}`
  +(r.error?`<span class="err">Güncelleme başarısız: ${esc(r.error)}${r.payload?' Son geçerli veri gösteriliyor.':''}</span>`:'')}
 function auto(D,k,lim,fn){const r=D.ind[k]||{label:k,url:'#'},[b,sig]=r.payload?fn(r.payload):[empty,''];
- const old=age(r.data_date)>lim;return card(r.label,r.error?'bad':old?'warn':sig,b,foot(r,lim))}
+ const old=age(r.data_date)>lim;return card(r.label,r.error?'bad':old?'warn':sig,b,foot(r,lim),r.error?'Hata':old?'Eski veri':'')}
 const rows=a=>'<table>'+a.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join('')+'</table>';
+const duo=p=>`<div class="duo"><div><span>Alış</span><b>${n(p.buy,4)}</b></div><div><span>Satış</span><b>${n(p.sell,4)}</b></div></div>`;
 const dir={yukari:'yukarı',asagi:'aşağı',yatay:'yatay'};
-function spx(p){const L={yukselis:['Yükseliş eğilimi','ok'],dusus:['Düşüş eğilimi','bad'],teyit_bekliyor:[`Kesişim oldu, teyit bekliyor (${p.held}/${p.teyit_gun} işlem günü)`,'warn'],kesisim_yok:['Veri aralığında kesişim yok','']}[p.state];
- const x=c=>c?`${tr(c.date)}, ${dir[c.dir]} yönlü`:'yok';
- return [`<p class="s">${L[0]}</p>`+rows([['EMA 9',n(p.ema9)],['EMA 14',n(p.ema14)],['Konum','EMA 9, EMA 14\'ün '+(p.above?'üstünde':'altında')],['Son kesişim',x(p.cross)],['Önceki kesişim',x(p.prev_cross)],['Fiyat verisi',p.freq+', '+p.n_obs+' gün']]),L[1]]}
-function vix(p){const d=p.days;return [`<p class="s">Son 5 işlem günü: ${dir[p.direction]} yönlü</p>`+rows(d.map(x=>[tr(x.date),`${n(x.value)} (${sg(x.change)})`])),p.direction==='yukari'?'warn':'']}
+function spx(p){const L={yukselis:['▲ Yükseliş eğilimi','ok'],dusus:['▼ Düşüş eğilimi','bad'],teyit_bekliyor:[`◆ Kesişim oldu, teyit bekliyor (${p.held}/${p.teyit_gun} gün)`,'warn'],kesisim_yok:['● Veri aralığında kesişim yok','']}[p.state];
+ const x=c=>c?`${tr(c.date)}, ${dir[c.dir]} yönlü`:'yok',fark=p.ema9-p.ema14;
+ return [`<p class="s">${L[0]}</p>`+rows([['EMA 9',n(p.ema9)],['EMA 14',n(p.ema14)],['Fark (9 − 14)',`<span class="${fark>0?'dn':'up'}">${ar(fark)} ${sg(fark)}</span>`],['Son kesişim',x(p.cross)],['Önceki kesişim',x(p.prev_cross)],['Fiyat verisi',p.freq+', '+p.n_obs+' gün']]),L[1]]}
+function vix(p){const d=p.days,c=p.direction==='yukari'?'var(--bad)':p.direction==='asagi'?'var(--ok)':'var(--acc)';
+ return [`<p class="v">${n(d[d.length-1].value)}</p><p class="s">${ar(p.direction==='yukari'?1:p.direction==='asagi'?-1:0)} Son 5 işlem günü: ${dir[p.direction]} yönlü</p>`+spark(d.map(x=>x.value),c)+rows(d.map(x=>[tr(x.date),`${n(x.value)} <span class="${x.change>0?'up':x.change<0?'dn':'nu'}">${ar(x.change)} ${sg(x.change)}</span>`])),p.direction==='yukari'?'warn':'']}
+function eur(p){const r=p.recent,ch=(r[r.length-1][1]/r[0][1]-1)*100;
+ return [`<p class="v">${n(p.last,4)}</p>`+spark(r.map(x=>x[1]),'var(--acc)')+rows([['Son 5 gün',`<span class="nu">${ar(ch)} ${sg(ch)}%</span>`],['Aralık',`${tr(r[0][0])} – ${tr(r[r.length-1][0])}`]]),'']}
 const days=(m,lim)=>m.date?age(m.date)>lim:false;
 function manual(m){
  const c=m.cds,t=m.tuik,out=[];
  let cl='',b=empty,st=days(c,7);
- if(c.value!=null){const v=c.value;const [s,k]=v<100?['Düşük risk','ok']:v<=300?['Orta risk','warn']:['Yüksek risk','bad'];cl=k;b=`<p class="v">${n(c.value,1)}</p><p class="s">${s}</p>`}
- out.push(card('Türkiye 5 yıllık CDS',st?'warn':cl,b,c.value==null?'Henüz girilmedi. data/manual.json dosyasını düzenle.':`${esc(c.source)}, giriş tarihi <b class="${st?'old':''}">${tr(c.date)}</b>${st?' (7 günden eski)':''}`));
+ if(c.value!=null){const v=c.value;const [s,k]=v<100?['Düşük risk','ok']:v<=300?['Orta risk','warn']:['Yüksek risk','bad'];cl=k;
+  b=`<p class="v">${n(v,1)}</p><p class="s">${s}</p>`+gauge('linear-gradient(90deg,var(--ok) 0 20%,var(--warn) 20% 60%,var(--bad) 60% 100%)',v/5,['0','100','300','500+'])}
+ out.push(card('Türkiye 5 yıllık CDS',st?'warn':cl,b,c.value==null?'Henüz girilmedi. data/manual.json dosyasını düzenle.':`${esc(c.source)} · giriş tarihi <b class="${st?'old':''}">${tr(c.date)}</b>${st?' (7 günden eski)':''}`,st?'Eski veri':''));
  cl='';b=empty;st=days(t,35);
- if(t.value!=null){const v=t.value;const [s,k]=v>100.5?['İyimserlik','ok']:v<99.5?['Kötümserlik','bad']:['Nötr civarı','warn'];cl=k;
-  b=`<p class="v">${n(v,1)}</p><p class="s">${s}</p>`+(t.previous!=null?rows([['Önceki ay',n(t.previous,1)],['Değişim',sg(v-t.previous)+' puan ('+sg((v/t.previous-1)*100)+'%)']]):'')}
- out.push(card('Ekonomik Güven Endeksi (TÜİK)',st?'warn':cl,b,t.value==null?'Henüz girilmedi. data/manual.json dosyasını düzenle.':`${esc(t.source)}, veri tarihi <b class="${st?'old':''}">${tr(t.date)}</b>${st?' (35 günden eski)':''}. 100 üstü iyimserlik, 100 altı kötümserlik, 99,5–100,5 nötr civarı.`));
+ if(t.value!=null){const v=t.value;const [s,k]=v>100.5?['▲ İyimserlik','ok']:v<99.5?['▼ Kötümserlik','bad']:['● Nötr civarı','warn'];cl=k;
+  b=`<p class="v">${n(v,1)}</p><p class="s">${s}</p>`+gauge('linear-gradient(90deg,var(--bad) 0 47.5%,var(--warn) 47.5% 52.5%,var(--ok) 52.5% 100%)',(v-90)*5,['90','100','110'])+(t.previous!=null?rows([['Önceki ay',n(t.previous,1)],['Değişim',`<span class="${v>=t.previous?'dn':'up'}">${ar(v-t.previous)} ${sg(v-t.previous)} puan (${sg((v/t.previous-1)*100)}%)</span>`]]):'')}
+ out.push(card('Ekonomik Güven Endeksi (TÜİK)',st?'warn':cl,b,t.value==null?'Henüz girilmedi. data/manual.json dosyasını düzenle.':`${esc(t.source)} · veri tarihi <b class="${st?'old':''}">${tr(t.date)}</b>${st?' (35 günden eski)':''}. 100 üstü iyimserlik, 100 altı kötümserlik, 99,5–100,5 nötr civarı.`,st?'Eski veri':''));
  return out.join('')}
 async function load(u){const r=await fetch(u+'?t='+Date.now());if(!r.ok)throw new Error(u+' açılamadı ('+r.status+')');return r.json()}
 (async()=>{let D={ind:{}},M=null,msg='';
  try{D=await load('data/data.json')}catch(e){msg='Veri dosyası yok: önce GitHub Actions\'ta "Veri güncelle" iş akışını çalıştır.'}
  try{M=await load('data/manual.json')}catch(e){}
- const A=(k,l,f)=>auto(D,k,l,f);
- $=A('fed',6,p=>[`<p class="v">%${n(p.lower)} – %${n(p.upper)}</p>`,'']);
- $+=A('policy',6,p=>[`<p class="v">%${n(p.value)}</p><p class="f">Son değişiklik: ${tr(p.since)}</p>`,'']);
- for(const k of['ticari','ihtiyac','konut'])$+=A(k,14,p=>[`<p class="v">%${n(p.value)}</p>`,'']);
- $+=A('tcmb_usd',6,p=>[rows([['Alış',n(p.buy,4)],['Satış',n(p.sell,4)]]),'']);
- $+=A('kapalicarsi',6,p=>[rows([['Alış',n(p.buy,4)],['Satış',n(p.sell,4)]])+'<p class="f">Harem Altın serbest piyasa verisi (Kapalıçarşı referansı), hafta içi günde bir anlık görüntü.</p>','']);
- $+=A('eurusd',6,p=>[`<p class="v">${n(p.last,4)}</p>`+rows(p.recent.map(x=>[tr(x[0]),n(x[1],4)])),'']);
- $+=A('vix',6,vix);$+=A('spx',6,spx);
- if(M)$+=manual(M);
- document.getElementById('app').innerHTML=(msg?`<section class="c bad"><p>${esc(msg)}</p></section>`:'')+$;
+ const H={},a=(k,l,f)=>H[k]=auto(D,k,l,f),P=k=>(D.ind[k]||{}).payload;
+ a('fed',6,p=>[`<p class="v">%${n(p.lower)} – %${n(p.upper)}</p>`,'']);
+ a('policy',6,p=>[`<p class="v">%${n(p.value)}</p><p class="f">Son değişiklik: ${tr(p.since)}</p>`,'']);
+ for(const k of['ticari','ihtiyac','konut'])a(k,14,p=>[`<p class="v">%${n(p.value)}</p>`,'']);
+ a('tcmb_usd',6,p=>[duo(p),'']);
+ a('kapalicarsi',6,p=>[duo(p)+'<p class="f">Harem Altın serbest piyasa verisi (Kapalıçarşı referansı), hafta içi günde bir anlık görüntü.</p>','']);
+ a('eurusd',6,eur);a('vix',6,vix);a('spx',6,spx);
+ const G=(t,ic,cl,h)=>`<h2 class="g"><span class="gi ${cl}">${ic}</span>${t}</h2><div class="grid ${cl}">${h}</div>`,g=ks=>ks.map(k=>H[k]).join('');
+ document.getElementById('app').innerHTML=(msg?`<section class="c bad"><p>${esc(msg)}</p></section>`:'')
+  +G('Faiz oranları','%','faiz',g(['fed','policy','ticari','ihtiyac','konut']))+G('Döviz','⇄','doviz',g(['tcmb_usd','kapalicarsi','eurusd']))
+  +G('Piyasalar','↗','piyasa',g(['vix','spx']))+(M?G('Elle girilen göstergeler','✎','risk',manual(M)):'');
+ const T=(l,v)=>`<div class="t"><span>${l}</span><b>${v}</b></div>`,pp=P('policy'),us=P('tcmb_usd'),eu=P('eurusd'),vx=P('vix');
+ document.getElementById('hero').innerHTML=T('TCMB politika faizi',pp?'%'+n(pp.value):'–')+T('USD/TRY (TCMB satış)',us?n(us.sell,4):'–')+T('EUR/USD',eu?n(eu.last,4):'–')+T('VIX',vx?n(vx.days[vx.days.length-1].value):'–');
  document.getElementById('gen').textContent=D.generated?'Veri dosyası: '+new Date(D.generated).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'Henüz veri yok';
 })();
 </script></body></html>
