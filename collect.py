@@ -33,9 +33,15 @@ def jget(url, **k):  # JSON bekler; HTML gelirse anlaşılır hata verir
     except ValueError: raise ValueError("JSON yerine başka içerik geldi: " + r.text[:80].replace("\n", " "))
 
 
-def redact(s):  # anahtarlar hata mesajıyla dosyaya sızmasın
+def secret(n):  # gizli değerin başındaki/sonundaki boşluk ve satır sonlarını at
+    return os.environ[n].strip()
+
+
+def redact(s):  # anahtarlar hata mesajıyla dosyaya sızmasın (her biçimde)
+    s = re.sub(r"(?i)((?:api_)?key=)[^&\s'\"]+", r"\1***", s)
     for n in ("FRED_API_KEY", "EVDS_API_KEY", "ALTINAPI_KEY"):
-        if os.environ.get(n): s = s.replace(os.environ[n], "***")
+        v = os.environ.get(n, "").strip()
+        if v: s = s.replace(v, "***")
     return s
 
 
@@ -47,8 +53,11 @@ def iso(t):
 
 
 def fred(sid, n=1):
+    key = secret("FRED_API_KEY")
+    if not re.fullmatch(r"[0-9a-z]{32}", key):
+        raise ValueError("FRED anahtarı 32 karakterlik olmalı (boşluksuz); Secret'ı yeniden gir")
     r = get("https://api.stlouisfed.org/fred/series/observations", params=dict(
-        series_id=sid, api_key=os.environ["FRED_API_KEY"], file_type="json",
+        series_id=sid, api_key=key, file_type="json",
         sort_order="desc", limit=n + 15)).json()
     o = [(x["date"], float(x["value"])) for x in r["observations"] if x["value"] != "."][:n]
     if not o: raise ValueError(sid + ": veri yok")
@@ -77,7 +86,7 @@ def f_evds(key):
     if not code: raise ValueError("EVDS seri kodu henüz girilmedi")
     d = (now - dt.timedelta(days=150)).strftime("%d-%m-%Y"); e = now.strftime("%d-%m-%Y")
     r = jget(f"https://evds3.tcmb.gov.tr/igmevdsms-dis/series={code}&startDate={d}&endDate={e}&type=json",
-             headers={"key": os.environ["EVDS_API_KEY"]})
+             headers={"key": secret("EVDS_API_KEY")})
     col = code.replace(".", "_")
     o = [(x["Tarih"], float(x[col])) for x in r.get("items", []) if x.get(col) not in (None, "")]
     if not o: raise ValueError(code + ": veri yok")
@@ -99,7 +108,7 @@ def f_altin(meta):
     if cnt.get(m, 0) >= ALTIN_LIMIT: raise RuntimeError(f"Aylık istek koruması doldu ({ALTIN_LIMIT})")
     cnt[m] = cnt.get(m, 0) + 1  # istekten önce say
     from altinapi import AltinapiClient
-    p = AltinapiClient(api_key=os.environ["ALTINAPI_KEY"]).get_price("USDTRY")
+    p = AltinapiClient(api_key=secret("ALTINAPI_KEY")).get_price("USDTRY")
     ts = p.get("timestamp")
     try: d = (dt.datetime.fromtimestamp(float(ts) / (1000 if float(ts) > 1e11 else 1), dt.timezone.utc)
               if str(ts).replace(".", "").isdigit() else dt.datetime.fromisoformat(str(ts).replace("Z", "+00:00"))).date().isoformat()
@@ -182,7 +191,7 @@ def run(mode="all"):  # all | main (Altınapi hariç) | altin (yalnız Altınapi
 
 
 def discover():  # EVDS seri adlarını listeler; kodları ben ya da sen buradan seçersin
-    b = "https://evds3.tcmb.gov.tr/igmevdsms-dis/"; h = {"key": os.environ["EVDS_API_KEY"]}
+    b = "https://evds3.tcmb.gov.tr/igmevdsms-dis/"; h = {"key": secret("EVDS_API_KEY")}
     for g in jget(b + "datagroups/mode=0&type=json", headers=h):
         name = g.get("DATAGROUP_NAME", "")
         if any(w in name.casefold() for w in ("kredi faiz", "politika", "repo ihale")):
