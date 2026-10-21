@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Ekonomi panosu veri toplayıcı. Eksik veriyi ASLA tahmin etmez; hata olursa kaydeder, son geçerli veriyi korur."""
-import os, sys, json, ssl, datetime as dt, xml.etree.ElementTree as ET
+import os, re, sys, json, ssl, datetime as dt, xml.etree.ElementTree as ET
 import requests
 from requests.adapters import HTTPAdapter
 
 OUT = "data/data.json"
 # EVDS seri kodları: "discover" çalıştırması sonrası doldurulacak (tahminle yazılmaz)
-EVDS = {"policy": "", "ticari": "", "ihtiyac": "", "konut": ""}
+EVDS = {"ticari": "TP.KTF17", "ihtiyac": "TP.KTF10", "konut": "TP.KTF12"}  # hepsi TL, Akım (yeni açılan kredi), haftalık
 ALTIN_LIMIT = 28      # Altınapi ücretsiz deneme: ayda 30 istek; 2 istek pay bırakılır
 EMA_TEYIT_GUN = 3     # kesişimden sonra aynı tarafta kalınması gereken işlem günü
 now = dt.datetime.now(dt.timezone.utc)
@@ -58,6 +58,18 @@ def fred(sid, n=1):
 def f_fed():
     u, l = fred("DFEDTARU")[-1], fred("DFEDTARL")[-1]
     return dict(upper=u[1], lower=l[1]), u[0]
+
+
+POLICY_URL = "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Temel+Faaliyetler/Para+Politikasi/Merkez+Bankasi+Faiz+Oranlari/1+Hafta+Repo"
+
+
+def f_policy():  # TCMB'nin resmî "1 Hafta Repo" tablosu (Tarih | Borç Alma | Borç Verme); EVDS'te doğrulanmış politika faizi serisi bulunamadı
+    t = re.sub(r"<[^>]+>", " ", get(POLICY_URL).text)
+    rows = re.findall(r"(\d{2}\.\d{2}\.\d{4})\s+(?:-|[\d.]+)\s+(\d{1,3}(?:\.\d+)?)", t)
+    if len(rows) < 30: raise ValueError(f"1 Hafta Repo tablosu okunamadı ({len(rows)} satır)")
+    d, v = max(((dt.datetime.strptime(a, "%d.%m.%Y").date(), float(b)) for a, b in rows), key=lambda x: x[0])
+    if not 0 < v < 200: raise ValueError("beklenmeyen değer: " + str(v))
+    return dict(value=v, since=d.isoformat()), now.date().isoformat()  # veri tarihi = kontrol günü; since = son değişiklik
 
 
 def f_evds(key):
@@ -135,7 +147,7 @@ def f_spx():
 
 JOBS = {
     "fed": ("FED hedef faiz aralığı", "https://fred.stlouisfed.org/series/DFEDTARU", f_fed),
-    "policy": ("TCMB politika faizi", "https://evds3.tcmb.gov.tr", lambda: f_evds("policy")),
+    "policy": ("TCMB politika faizi (1 hafta repo)", POLICY_URL, f_policy),
     "ticari": ("Ticari kredi faizi", "https://evds3.tcmb.gov.tr", lambda: f_evds("ticari")),
     "ihtiyac": ("İhtiyaç kredisi faizi", "https://evds3.tcmb.gov.tr", lambda: f_evds("ihtiyac")),
     "konut": ("Konut kredisi faizi", "https://evds3.tcmb.gov.tr", lambda: f_evds("konut")),
