@@ -55,7 +55,7 @@ async function load(u){const r=await fetch(u+'?t='+Date.now());if(!r.ok)throw ne
  try{M=await load('data/manual.json')}catch(e){}
  const A=(k,l,f)=>auto(D,k,l,f);
  $=A('fed',6,p=>[`<p class="v">%${n(p.lower)} – %${n(p.upper)}</p>`,'']);
- $+=A('policy',6,p=>[`<p class="v">%${n(p.value)}</p>`,'']);
+ $+=A('policy',6,p=>[`<p class="v">%${n(p.value)}</p><p class="f">Son değişiklik: ${tr(p.since)}</p>`,'']);
  for(const k of['ticari','ihtiyac','konut'])$+=A(k,14,p=>[`<p class="v">%${n(p.value)}</p>`,'']);
  $+=A('tcmb_usd',6,p=>[rows([['Alış',n(p.buy,4)],['Satış',n(p.sell,4)]]),'']);
  $+=A('kapalicarsi',6,p=>[rows([['Alış',n(p.buy,4)],['Satış',n(p.sell,4)]])+'<p class="f">Harem Altın serbest piyasa verisi (Kapalıçarşı referansı), hafta içi günde bir anlık görüntü.</p>','']);
