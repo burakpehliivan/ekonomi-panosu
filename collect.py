@@ -27,6 +27,12 @@ def get(url, **k):
     r = S.get(url, timeout=30, **k); r.raise_for_status(); return r
 
 
+def jget(url, **k):  # JSON bekler; HTML gelirse anlaşılır hata verir
+    r = get(url, **k)
+    try: return r.json()
+    except ValueError: raise ValueError("JSON yerine başka içerik geldi: " + r.text[:80].replace("\n", " "))
+
+
 def redact(s):  # anahtarlar hata mesajıyla dosyaya sızmasın
     for n in ("FRED_API_KEY", "EVDS_API_KEY", "ALTINAPI_KEY"):
         if os.environ.get(n): s = s.replace(os.environ[n], "***")
@@ -58,8 +64,8 @@ def f_evds(key):
     code = EVDS[key]
     if not code: raise ValueError("EVDS seri kodu henüz girilmedi")
     d = (now - dt.timedelta(days=150)).strftime("%d-%m-%Y"); e = now.strftime("%d-%m-%Y")
-    r = get(f"https://evds3.tcmb.gov.tr/service/evds/series={code}&startDate={d}&endDate={e}&type=json",
-            headers={"key": os.environ["EVDS_API_KEY"]}).json()
+    r = jget(f"https://evds3.tcmb.gov.tr/igmevdsms-dis/series={code}&startDate={d}&endDate={e}&type=json",
+             headers={"key": os.environ["EVDS_API_KEY"]})
     col = code.replace(".", "_")
     o = [(x["Tarih"], float(x[col])) for x in r.get("items", []) if x.get(col) not in (None, "")]
     if not o: raise ValueError(code + ": veri yok")
@@ -164,12 +170,12 @@ def run(mode="all"):  # all | main (Altınapi hariç) | altin (yalnız Altınapi
 
 
 def discover():  # EVDS seri adlarını listeler; kodları ben ya da sen buradan seçersin
-    b = "https://evds3.tcmb.gov.tr/service/evds/"; h = {"key": os.environ["EVDS_API_KEY"]}
-    for g in get(b + "datagroups/mode=0&type=json", headers=h).json():
+    b = "https://evds3.tcmb.gov.tr/igmevdsms-dis/"; h = {"key": os.environ["EVDS_API_KEY"]}
+    for g in jget(b + "datagroups/mode=0&type=json", headers=h):
         name = g.get("DATAGROUP_NAME", "")
         if any(w in name.casefold() for w in ("kredi faiz", "politika", "repo ihale")):
             print("GRUP", g["DATAGROUP_CODE"], "|", name)
-            for s in get(b + "serieList/type=json&code=" + g["DATAGROUP_CODE"], headers=h).json():
+            for s in jget(b + "serieList/type=json&code=" + g["DATAGROUP_CODE"], headers=h):
                 print("   ", s["SERIE_CODE"], "|", s["SERIE_NAME"])
 
 
