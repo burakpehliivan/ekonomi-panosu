@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ekonomi panosu</title>
+<style>
+:root{--bg:#eef1f4;--card:#fff;--ink:#17202a;--mut:#5d6b7a;--line:#d9e0e7;--ok:#17744a;--warn:#a05a00;--bad:#b3261e;--tint:#fdf0d2;color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root{--bg:#10151b;--card:#18202a;--ink:#e8edf2;--mut:#93a1b0;--line:#2a3542;--ok:#5fd39a;--warn:#f0b35a;--bad:#ff8a80;--tint:#3a2f12}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;padding:max(14px,env(safe-area-inset-top)) 14px max(24px,env(safe-area-inset-bottom))}
+main{max-width:560px;margin:0 auto}h1{font-size:1.25rem;margin:4px 0 2px}.sub{color:var(--mut);font-size:.85rem;margin:0 0 14px}
+.c{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:6px;padding:12px 14px;margin:0 0 10px}
+.c.ok{border-left-color:var(--ok)}.c.warn{border-left-color:var(--warn)}.c.bad{border-left-color:var(--bad)}
+h2{font-size:.95rem;font-weight:600;margin:0 0 6px;color:var(--mut)}
+.v{font-size:1.7rem;font-weight:650;font-variant-numeric:tabular-nums;margin:0}.s{font-weight:600;margin:2px 0 6px}
+.ok .s{color:var(--ok)}.warn .s{color:var(--warn)}.bad .s{color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}td{padding:3px 0;border-top:1px solid var(--line)}td:last-child{text-align:right}
+.f{font-size:.76rem;color:var(--mut);margin:8px 0 0}.f a{color:inherit}.old{background:var(--tint);padding:0 3px;border-radius:3px}
+.err{display:block;margin-top:4px;color:var(--bad)}.note{font-size:.78rem;color:var(--mut);margin:14px 2px}
+</style></head><body><main>
+<h1>Ekonomi panosu</h1><p class="sub" id="gen">Yükleniyor…</p><div id="app"></div>
+<p class="note">CDS ve Ekonomik Güven eşikleri kişisel sınıflandırmadır, evrensel standart değildir. CDS tek başına kur tahmini üretmez, diğer göstergelerle birlikte okunur. Eksik veri tahminle doldurulmaz. PMI bu sürümde yok.</p>
+</main>
+<script>
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const n=(x,d=2)=>Number(x).toLocaleString('tr-TR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const age=d=>d?Math.floor((Date.now()-new Date(d+'T12:00:00'))/864e5):0;
+const tr=d=>d?d.split('-').reverse().join('.'):'-';
+const sg=x=>(x>0?'+':'')+n(x);
+const card=(t,cls,b,f)=>`<section class="c ${cls}"><h2>${t}</h2>${b}<p class="f">${f}</p></section>`;
+const empty='<p class="v">Veri yok</p>';
+function foot(r,lim){const old=age(r.data_date)>lim;
+ return `<a href="${r.url}">Kaynak</a>, veri tarihi <b class="${old?'old':''}">${tr(r.data_date)}</b>${old?' (eski)':''}, son başarılı güncelleme ${r.last_ok?new Date(r.last_ok).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'yok'}`
+ +(r.error?`<span class="err">Güncelleme başarısız: ${esc(r.error)}${r.payload?' Son geçerli veri gösteriliyor.':''}</span>`:'')}
+function auto(D,k,lim,fn){const r=D.ind[k]||{label:k,url:'#'},[b,sig]=r.payload?fn(r.payload):[empty,''];
+ const old=age(r.data_date)>lim;return card(r.label,r.error?'bad':old?'warn':sig,b,foot(r,lim))}
+const rows=a=>'<table>'+a.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join('')+'</table>';
+const dir={yukari:'yukarı',asagi:'aşağı',yatay:'yatay'};
+function spx(p){const L={yukselis:['Yükseliş eğilimi','ok'],dusus:['Düşüş eğilimi','bad'],teyit_bekliyor:[`Kesişim oldu, teyit bekliyor (${p.held}/${p.teyit_gun} işlem günü)`,'warn'],kesisim_yok:['Veri aralığında kesişim yok','']}[p.state];
+ const x=c=>c?`${tr(c.date)}, ${dir[c.dir]} yönlü`:'yok';
+ return [`<p class="s">${L[0]}</p>`+rows([['EMA 9',n(p.ema9)],['EMA 14',n(p.ema14)],['Konum','EMA 9, EMA 14\'ün '+(p.above?'üstünde':'altında')],['Son kesişim',x(p.cross)],['Önceki kesişim',x(p.prev_cross)],['Fiyat verisi',p.freq+', '+p.n_obs+' gün']]),L[1]]}
+function vix(p){const d=p.days;return [`<p class="s">Son 5 işlem günü: ${dir[p.direction]} yönlü</p>`+rows(d.map(x=>[tr(x.date),`${n(x.value)} (${sg(x.change)})`])),p.direction==='yukari'?'warn':'']}
+const days=(m,lim)=>m.date?age(m.date)>lim:false;
+function manual(m){
+ const c=m.cds,t=m.tuik,out=[];
+ let cl='',b=empty,st=days(c,7);
+ if(c.value!=null){const v=c.value;const [s,k]=v<100?['Düşük risk','ok']:v<=300?['Orta risk','warn']:['Yüksek risk','bad'];cl=k;b=`<p class="v">${n(c.value,1)}</p><p class="s">${s}</p>`}
+ out.push(card('Türkiye 5 yıllık CDS',st?'warn':cl,b,c.value==null?'Henüz girilmedi. data/manual.json dosyasını düzenle.':`${esc(c.source)}, giriş tarihi <b class="${st?'old':''}">${tr(c.date)}</b>${st?' (7 günden eski)':''}`));
+ cl='';b=empty;st=days(t,35);
+ if(t.value!=null){const v=t.value;const [s,k]=v>100.5?['İyimserlik','ok']:v<99.5?['Kötümserlik','bad']:['Nötr civarı','warn'];cl=k;
+  b=`<p class="v">${n(v,1)}</p><p class="s">${s}</p>`+(t.previous!=null?rows([['Önceki ay',n(t.previous,1)],['Değişim',sg(v-t.previous)+' puan ('+sg((v/t.previous-1)*100)+'%)']]):'')}
+ out.push(card('Ekonomik Güven Endeksi (TÜİK)',st?'warn':cl,b,t.value==null?'Henüz girilmedi. data/manual.json dosyasını düzenle.':`${esc(t.source)}, veri tarihi <b class="${st?'old':''}">${tr(t.date)}</b>${st?' (35 günden eski)':''}. 100 üstü iyimserlik, 100 altı kötümserlik, 99,5–100,5 nötr civarı.`));
+ return out.join('')}
+async function load(u){const r=await fetch(u+'?t='+Date.now());if(!r.ok)throw new Error(u+' açılamadı ('+r.status+')');return r.json()}
+(async()=>{let D={ind:{}},M=null,msg='';
+ try{D=await load('data/data.json')}catch(e){msg='Veri dosyası yok: önce GitHub Actions\'ta "Veri güncelle" iş akışını çalıştır.'}
+ try{M=await load('data/manual.json')}catch(e){}
+ const A=(k,l,f)=>auto(D,k,l,f);
+ $=A('fed',6,p=>[`<p class="v">%${n(p.lower)} – %${n(p.upper)}</p>`,'']);
+ $+=A('policy',6,p=>[`<p class="v">%${n(p.value)}</p>`,'']);
+ for(const k of['ticari','ihtiyac','konut'])$+=A(k,14,p=>[`<p class="v">%${n(p.value)}</p>`,'']);
+ $+=A('tcmb_usd',6,p=>[rows([['Alış',n(p.buy,4)],['Satış',n(p.sell,4)]]),'']);
+ $+=A('kapalicarsi',6,p=>[rows([['Alış',n(p.buy,4)],['Satış',n(p.sell,4)]])+'<p class="f">Harem Altın serbest piyasa verisi (Kapalıçarşı referansı), hafta içi günde bir anlık görüntü.</p>','']);
+ $+=A('eurusd',6,p=>[`<p class="v">${n(p.last,4)}</p>`+rows(p.recent.map(x=>[tr(x[0]),n(x[1],4)])),'']);
+ $+=A('vix',6,vix);$+=A('spx',6,spx);
+ if(M)$+=manual(M);
+ document.getElementById('app').innerHTML=(msg?`<section class="c bad"><p>${esc(msg)}</p></section>`:'')+$;
+ document.getElementById('gen').textContent=D.generated?'Veri dosyası: '+new Date(D.generated).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'Henüz veri yok';
+})();
+</script></body></html>
