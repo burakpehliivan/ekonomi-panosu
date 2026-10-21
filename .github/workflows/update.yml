@@ -1,0 +1,31 @@
+name: Veri güncelle
+on:
+  schedule:
+    - cron: "30 16 * * 1-5"   # hafta içi her gün, 19:30 Türkiye saati (yaz/kış saati fark etmez, UTC)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Boş bırak = güncelle | discover = EVDS seri listesini yazdır"
+        default: ""
+permissions:
+  contents: write
+concurrency: veri-guncelle
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests altinapi
+      - run: python collect.py ${{ inputs.mode }}
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          EVDS_API_KEY: ${{ secrets.EVDS_API_KEY }}
+          ALTINAPI_KEY: ${{ secrets.ALTINAPI_KEY }}
+      - run: |
+          git config user.name "veri-botu"
+          git config user.email "veri-botu@users.noreply.github.com"
+          git add data/data.json
+          git diff --cached --quiet || (git commit -m "veri güncellemesi" && git push)
