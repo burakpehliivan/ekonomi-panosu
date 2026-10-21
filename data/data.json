@@ -1,20 +1,21 @@
 {
- "generated": "2026-10-21T20:27:08+00:00",
+ "generated": "2026-10-21T20:50:07+00:00",
  "ind": {
   "fed": {
    "label": "FED hedef faiz aralığı",
    "url": "https://fred.stlouisfed.org/series/DFEDTARU",
-   "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+   "error": "ValueError: JSON yerine web sayfası geldi (kaynak bakımda olabilir): Site Maintenance | St. Louis Fed We'll be back soon! This web site is currently undergoing proactive maintenance. We will be back soon. — Th"
   },
   "policy": {
    "label": "TCMB politika faizi (1 hafta repo)",
    "url": "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Temel+Faaliyetler/Para+Politikasi/Merkez+Bankasi+Faiz+Oranlari/1+Hafta+Repo",
    "payload": {
     "value": 37.0,
-    "since": "2026-01-23"
+    "since": "2026-01-23",
+    "previous": 38.0
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-21T20:26:59+00:00",
+   "last_ok": "2026-10-21T20:50:00+00:00",
    "error": null
   },
   "ticari": {
@@ -22,10 +23,12 @@
    "url": "https://evds3.tcmb.gov.tr",
    "payload": {
     "value": 53.02,
-    "series": "TP.KTF17"
+    "series": "TP.KTF17",
+    "previous": 53.07,
+    "previous_date": "2026-10-02"
    },
    "data_date": "2026-10-09",
-   "last_ok": "2026-10-21T20:26:59+00:00",
+   "last_ok": "2026-10-21T20:50:00+00:00",
    "error": null
   },
   "ihtiyac": {
@@ -33,10 +36,12 @@
    "url": "https://evds3.tcmb.gov.tr",
    "payload": {
     "value": 62.21,
-    "series": "TP.KTF10"
+    "series": "TP.KTF10",
+    "previous": 62.03,
+    "previous_date": "2026-10-02"
    },
    "data_date": "2026-10-09",
-   "last_ok": "2026-10-21T20:26:59+00:00",
+   "last_ok": "2026-10-21T20:50:00+00:00",
    "error": null
   },
   "konut": {
@@ -44,10 +49,12 @@
    "url": "https://evds3.tcmb.gov.tr",
    "payload": {
     "value": 41.66,
-    "series": "TP.KTF12"
+    "series": "TP.KTF12",
+    "previous": 41.87,
+    "previous_date": "2026-10-02"
    },
    "data_date": "2026-10-09",
-   "last_ok": "2026-10-21T20:26:59+00:00",
+   "last_ok": "2026-10-21T20:50:00+00:00",
    "error": null
   },
   "tcmb_usd": {
@@ -58,7 +65,7 @@
     "sell": 49.6015
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-21T20:26:59+00:00",
+   "last_ok": "2026-10-21T20:50:00+00:00",
    "error": null
   },
   "eurusd": {
@@ -90,18 +97,18 @@
     ]
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-21T20:26:59+00:00",
+   "last_ok": "2026-10-21T20:50:00+00:00",
    "error": null
   },
   "vix": {
    "label": "VIX",
    "url": "https://fred.stlouisfed.org/series/VIXCLS",
-   "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+   "error": "ValueError: JSON yerine web sayfası geldi (kaynak bakımda olabilir): Site Maintenance | St. Louis Fed We'll be back soon! This web site is currently undergoing proactive maintenance. We will be back soon. — Th"
   },
   "spx": {
    "label": "S&P 500 EMA 9/14",
    "url": "https://fred.stlouisfed.org/series/SP500",
-   "error": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+   "error": "ValueError: JSON yerine web sayfası geldi (kaynak bakımda olabilir): Site Maintenance | St. Louis Fed We'll be back soon! This web site is currently undergoing proactive maintenance. We will be back soon. — Th"
   },
   "kapalicarsi": {
    "label": "Harem Altın USD (Altınapi)",
