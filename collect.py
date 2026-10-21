@@ -141,10 +141,11 @@ JOBS = {
 }
 
 
-def run():
+def run(mode="all"):  # all | main (Altınapi hariç) | altin (yalnız Altınapi)
     old = json.load(open(OUT)) if os.path.exists(OUT) else {}
     ind, meta = old.get("ind", {}), old.get("meta", {})
     for k, (label, url, fn) in JOBS.items():
+        if (mode == "main" and k == "kapalicarsi") or (mode == "altin" and k != "kapalicarsi"): continue
         r = ind.setdefault(k, {}); r.update(label=label, url=url)
         try:
             if k == "kapalicarsi":
@@ -173,4 +174,5 @@ def discover():  # EVDS seri adlarını listeler; kodları ben ya da sen buradan
 
 
 if __name__ == "__main__":
-    discover() if len(sys.argv) > 1 and sys.argv[1] == "discover" else run()
+    a = sys.argv[1] if len(sys.argv) > 1 else "all"
+    discover() if a == "discover" else run(a)
