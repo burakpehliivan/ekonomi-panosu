@@ -30,7 +30,9 @@ def get(url, **k):
 def jget(url, **k):  # JSON bekler; HTML gelirse anlaşılır hata verir
     r = get(url, **k)
     try: return r.json()
-    except ValueError: raise ValueError("JSON yerine başka içerik geldi: " + r.text[:80].replace("\n", " "))
+    except ValueError:
+        t = re.sub(r"(?is)<(script|style).*?</(script|style)>|<[^>]+>", " ", r.text)
+        raise ValueError("JSON yerine web sayfası geldi (kaynak bakımda olabilir): " + " ".join(t.split())[:140])
 
 
 def secret(n):  # gizli değerin başındaki/sonundaki boşluk ve satır sonlarını at
@@ -56,17 +58,20 @@ def fred(sid, n=1):
     key = secret("FRED_API_KEY")
     if not re.fullmatch(r"[0-9a-z]{32}", key):
         raise ValueError("FRED anahtarı 32 karakterlik olmalı (boşluksuz); Secret'ı yeniden gir")
-    r = get("https://api.stlouisfed.org/fred/series/observations", params=dict(
+    r = jget("https://api.stlouisfed.org/fred/series/observations", params=dict(
         series_id=sid, api_key=key, file_type="json",
-        sort_order="desc", limit=n + 15)).json()
+        sort_order="desc", limit=n + 15))
     o = [(x["date"], float(x["value"])) for x in r["observations"] if x["value"] != "."][:n]
     if not o: raise ValueError(sid + ": veri yok")
     return o[::-1]  # eski -> yeni
 
 
 def f_fed():
-    u, l = fred("DFEDTARU")[-1], fred("DFEDTARL")[-1]
-    return dict(upper=u[1], lower=l[1]), u[0]
+    u, l = fred("DFEDTARU", 900), fred("DFEDTARL", 900)
+    now_u = u[-1][1]
+    k = next((i for i in range(len(u) - 1, -1, -1) if u[i][1] != now_u), None)  # son farklı değer
+    ch = dict(previous_upper=u[k][1], since=u[k + 1][0]) if k is not None else dict(previous_upper=None, since=None)
+    return dict(upper=now_u, lower=l[-1][1], **ch), u[-1][0]
 
 
 POLICY_URL = "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Temel+Faaliyetler/Para+Politikasi/Merkez+Bankasi+Faiz+Oranlari/1+Hafta+Repo"
@@ -76,9 +81,10 @@ def f_policy():  # TCMB'nin resmî "1 Hafta Repo" tablosu (Tarih | Borç Alma | 
     t = re.sub(r"<[^>]+>", " ", get(POLICY_URL).text)
     rows = re.findall(r"(\d{2}\.\d{2}\.\d{4})\s+(?:-|[\d.]+)\s+(\d{1,3}(?:\.\d+)?)", t)
     if len(rows) < 30: raise ValueError(f"1 Hafta Repo tablosu okunamadı ({len(rows)} satır)")
-    d, v = max(((dt.datetime.strptime(a, "%d.%m.%Y").date(), float(b)) for a, b in rows), key=lambda x: x[0])
+    pts = sorted((dt.datetime.strptime(a, "%d.%m.%Y").date(), float(b)) for a, b in rows)
+    (d, v), (_, pv) = pts[-1], pts[-2]
     if not 0 < v < 200: raise ValueError("beklenmeyen değer: " + str(v))
-    return dict(value=v, since=d.isoformat()), now.date().isoformat()  # veri tarihi = kontrol günü; since = son değişiklik
+    return dict(value=v, since=d.isoformat(), previous=pv), now.date().isoformat()  # veri tarihi = kontrol günü; since = son değişiklik
 
 
 def f_evds(key):
@@ -90,7 +96,8 @@ def f_evds(key):
     col = code.replace(".", "_")
     o = [(x["Tarih"], float(x[col])) for x in r.get("items", []) if x.get(col) not in (None, "")]
     if not o: raise ValueError(code + ": veri yok")
-    return dict(value=o[-1][1], series=code), iso(o[-1][0])
+    pv = o[-2] if len(o) > 1 else None
+    return dict(value=o[-1][1], series=code, previous=pv[1] if pv else None, previous_date=iso(pv[0]) if pv else None), iso(o[-1][0])
 
 
 def f_tcmb():
