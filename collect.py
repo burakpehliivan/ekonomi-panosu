@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Ekonomi panosu veri toplayıcı. Eksik veriyi ASLA tahmin etmez; hata olursa kaydeder, son geçerli veriyi korur."""
-import os, re, sys, json, ssl, datetime as dt, xml.etree.ElementTree as ET
+import os, re, io, sys, json, ssl, datetime as dt, xml.etree.ElementTree as ET
 import requests
 from requests.adapters import HTTPAdapter
 
@@ -107,6 +107,31 @@ def f_tcmb():
             dt.datetime.strptime(x.get("Tarih"), "%d.%m.%Y").date().isoformat())
 
 
+DTH_URL = "https://www.tcmb.gov.tr/wps/wcm/connect/173b7dec-d6c6-4727-9f51-82e0f4138560/Para_Banka.pdf?MOD=AJPERES"
+NUM5 = r"((?:-?\d{1,3}(?:\.\d{3})*\s+){4}-?\d{1,3}(?:\.\d{3})*)"  # 5 haftalık sütun, en yeni hafta solda
+
+
+def dth_parse(t):  # TCMB Haftalık Para ve Banka İstatistikleri: Tablo 4 (YP mevduat) ve Tablo 5 (parite etkisinden arındırılmış değişim)
+    a = t.index("Tablo 4."); b = t.index("Tablo 5.", a); c = t.index("Tablo 6.", b)
+    s4, s5 = t[a:b], t[b:c]
+    def row(s, pat):
+        m = re.search(pat + r"\s+" + NUM5, s)
+        if not m: raise ValueError("DTH satırı bulunamadı: " + pat[:18])
+        return [int(x.replace(".", "")) for x in m.group(1).split()]
+    ds = re.findall(r"\b\d{1,2}\.\d{1,2}\.\d{4}\b", s4)[:5]
+    if len(ds) < 5: raise ValueError("DTH tarih başlığı okunamadı")
+    return dict(dates=[dt.datetime.strptime(d, "%d.%m.%Y").date().isoformat() for d in ds],
+                total=row(s4, r"A\.\s*Yurt\s+\S+\s+Yerle\S*"), gercek=row(s4, r"1\.\s*Ger\S*\s+Ki\S*"),
+                tuzel=row(s4, r"2\.\s*T\S*zel\s+Ki\S*"), adj=row(s5, r"A\.\s*PAR[^)]*\)"))
+
+
+def f_dth():
+    from pypdf import PdfReader
+    t = "\n".join(p.extract_text() or "" for p in PdfReader(io.BytesIO(get(DTH_URL).content)).pages)
+    p = dth_parse(t)
+    return p, p["dates"][0]  # veri tarihi = referans haftanın son günü (TCMB sonraki hafta perşembe yayımlar)
+
+
 def f_altin(meta):
     ind = meta.get("_prev_altin", {})
     if ind.get("last_ok", "")[:10] == now.date().isoformat() or now.weekday() > 4:
@@ -168,6 +193,7 @@ JOBS = {
     "ihtiyac": ("İhtiyaç kredisi faizi", "https://evds3.tcmb.gov.tr", lambda: f_evds("ihtiyac")),
     "konut": ("Konut kredisi faizi", "https://evds3.tcmb.gov.tr", lambda: f_evds("konut")),
     "tcmb_usd": ("TCMB USD kuru", "https://www.tcmb.gov.tr/kurlar/today.xml", f_tcmb),
+    "dth": ("DTH: yurt içi yerleşik YP mevduatı", DTH_URL, f_dth),
     "kapalicarsi": ("Harem Altın USD (Altınapi)", "https://altinapi.com", None),
     "eurusd": ("EUR/USD (ECB)", "https://data-api.ecb.europa.eu", f_eur),
     "vix": ("VIX", "https://fred.stlouisfed.org/series/VIXCLS", f_vix),
