@@ -1,7 +1,9 @@
 name: Veri güncelle
 on:
   schedule:
-    - cron: "30 16 * * 1-5"   # hafta içi her gün 19:30 Türkiye saati (UTC 16:30)
+    - cron: "15 7 * * 1-5"    # 10:15 TR: sabah (Altınapi anlık görüntüsü bu çalışmada alınır)
+    - cron: "15 13 * * 1-5"   # 16:15 TR: TCMB 15:30 kuru, PPK kararı, perşembe DTH
+    - cron: "0 16 * * 1-5"    # 19:00 TR: ECB kuru, FRED günlük kapanışlar
   workflow_dispatch:
     inputs:
       mode:
@@ -18,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install requests
+      - run: pip install requests pypdf
       - name: FRED, TCMB, ECB (Altınapi hariç)
         run: python collect.py ${{ inputs.mode || 'main' }}
         env:
