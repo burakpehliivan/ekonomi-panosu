@@ -63,6 +63,7 @@ td{padding:5px 0;border-top:1px solid var(--line)}td:first-child{color:var(--mut
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const n=(x,d=2)=>Number(x).toLocaleString('tr-TR',{minimumFractionDigits:d,maximumFractionDigits:d});
 const age=d=>d?Math.floor((Date.now()-new Date(d+'T12:00:00'))/864e5):0;
+const rel=d=>{if(!d)return'';const a=age(d);return a===0?' · bugün':a===1?' · dün':` · ${a} gün önce`};
 const tr=d=>d?d.split('-').reverse().join('.'):'-';
 const sg=x=>(x>0?'+':'')+n(x);
 const ar=x=>x>0?'▲':x<0?'▼':'●';
@@ -73,7 +74,7 @@ function spark(v,c){if(v.length<2)return'';const mn=Math.min(...v),r=(Math.max(.
  return `<svg class="sp" viewBox="0 0 120 42" preserveAspectRatio="none" aria-hidden="true"><polygon points="2,40 ${d} 118,40" fill="${c}" opacity=".14"/><polyline points="${d}" fill="none" stroke="${c}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><circle cx="${l[0]}" cy="${l[1]}" r="3" fill="${c}"/></svg>`}
 const gauge=(bg,pos,ticks)=>`<div class="gauge" style="background:${bg}"><i class="mk" style="left:${Math.max(0,Math.min(100,pos))}%"></i></div><div class="tk">${ticks.map(t=>`<span>${t}</span>`).join('')}</div>`;
 function foot(r,lim){const old=age(r.data_date)>lim;
- return `<a href="${r.url}">Kaynak</a> · veri tarihi <b class="${old?'old':''}">${tr(r.data_date)}</b>${old?' (eski)':''} · son başarılı güncelleme ${r.last_ok?new Date(r.last_ok).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'yok'}`
+ return `<a href="${r.url}">Kaynak</a> · veri tarihi <b class="${old?'old':''}">${tr(r.data_date)}</b>${rel(r.data_date)}${old?' (eski)':''} · son başarılı güncelleme ${r.last_ok?new Date(r.last_ok).toLocaleString('tr-TR',{dateStyle:'short',timeStyle:'short'}):'yok'}`
  +(r.error?`<span class="err">Güncelleme başarısız: ${esc(r.error)}${r.payload?' Son geçerli veri gösteriliyor.':''}</span>`:'')}
 function auto(D,k,lim,fn){const r=D.ind[k]||{label:k,url:'#'},[b,sig]=r.payload?fn(r.payload):[empty,''];
  const old=age(r.data_date)>lim;return card(r.label,r.error?'bad':old?'warn':sig,b,foot(r,lim),r.error?'Hata':old?'Eski veri':'')}
@@ -110,6 +111,11 @@ function usd(D){
   if(a.data_date!==b.data_date)body+=`<p class="f"><span class="old">Dikkat</span> TCMB verisi ${tr(a.data_date)}, Harem verisi ${tr(b.data_date)} tarihli; fark farklı günlere ait.</p>`}
  const ft=(r,l)=>`<b>${l}</b> · `+foot(r,6);
  return card('USD/TRY: TCMB ve serbest piyasa',err?'bad':old?'warn':'',body,ft(a,'TCMB')+'<br>'+ft(b,'Harem Altın (Altınapi)'),err?'Hata':old?'Eski veri':'')}
+const sgi=x=>(x>0?'+':'')+Number(x).toLocaleString('tr-TR');
+function dth(p){const t=p.total,a=p.adj,son=a[0],s4=a.slice(0,4).reduce((x,y)=>x+y,0);
+ const L=son>0&&s4>0?['▲ Artış eğilimi','warn']:son<0&&s4<0?['▼ Azalış eğilimi','ok']:['● Karışık seyir',''];
+ const st=son>0&&s4>0?'Son hafta ve son 4 haftanın toplamı artışta: dövize yönelim artıyor, kur üzerinde yukarı yönlü baskı sinyali.':son<0&&s4<0?'Son hafta ve son 4 haftanın toplamı azalışta: dövize hücum eğilimi yok, bu kanaldan kurda ek baskı görünmüyor.':`Son hafta ${son>0?'artışta':'azalışta'}, son 4 haftanın toplamı ${s4>0?'artışta':'azalışta'}: net bir yön yok.`;
+ return [`<p class="v">${n(t[0]/1000,1)} mlr $</p><p class="s">${L[0]}</p>`+spark(t.slice().reverse(),L[1]==='warn'?'var(--bad)':L[1]==='ok'?'var(--ok)':'var(--acc)')+rows([['Gerçek kişi',n(p.gercek[0]/1000,1)+' mlr $'],['Tüzel kişi',n(p.tuzel[0]/1000,1)+' mlr $'],['Haftalık değişim*',`<span class="nu">${ar(son)} ${sgi(son)} mn $</span>`],['Son 4 hafta toplamı*',`<span class="nu">${ar(s4)} ${sgi(s4)} mn $</span>`]])+`<p class="f">* Parite etkisinden arındırılmış (TCMB). Toplam, kıymetli maden depo hesaplarını da içerir.</p>`+yo('Yurt içi yerleşiklerin bankalardaki döviz mevduatı (DTH). Artış dövize yönelimi, azalış tersini gösterir. TCMB haftalık yayımlar, veri bir hafta kadar gecikmelidir.',st),L[1]]}
 const days=(m,lim)=>m.date?age(m.date)>lim:false;
 function manual(m){
  const c=m.cds,t=m.tuik,out=[];
@@ -131,10 +137,10 @@ async function load(u){const r=await fetch(u+'?t='+Date.now());if(!r.ok)throw ne
  a('policy',6,p=>[`<p class="v">%${n(p.value)}</p>`+dlt(p.value,p.previous,p.since,'değişiklik'),'']);
  for(const k of['ticari','ihtiyac','konut'])a(k,14,p=>[`<p class="v">%${n(p.value)}</p>`+dlt(p.value,p.previous,p.previous_date,'tarih'),'']);
  H.usd=usd(D);
- a('eurusd',6,eur);a('vix',6,vix);a('spx',6,spx);
+ a('eurusd',6,eur);a('dth',14,dth);a('vix',6,vix);a('spx',6,spx);
  const G=(t,ic,cl,h)=>`<h2 class="g"><span class="gi ${cl}">${ic}</span>${t}</h2><div class="grid ${cl}">${h}</div>`,g=ks=>ks.map(k=>H[k]).join('');
  document.getElementById('app').innerHTML=(msg?`<section class="c bad"><p>${esc(msg)}</p></section>`:'')
-  +G('Faiz oranları','%','faiz',g(['fed','policy','ticari','ihtiyac','konut']))+G('Döviz','⇄','doviz',g(['usd','eurusd']))
+  +G('Faiz oranları','%','faiz',g(['fed','policy','ticari','ihtiyac','konut']))+G('Döviz','⇄','doviz',g(['usd','eurusd','dth']))
   +G('Piyasalar','↗','piyasa',g(['vix','spx']))+(M?G('Risk ve Güven','◆','risk',manual(M)):'');
  const T=(l,v)=>`<div class="t"><span>${l}</span><b>${v}</b></div>`,pp=P('policy'),us=P('tcmb_usd'),eu=P('eurusd'),vx=P('vix');
  document.getElementById('hero').innerHTML=T('TCMB politika faizi',pp?'%'+n(pp.value):'–')+T('USD/TRY (TCMB satış)',us?n(us.sell,4):'–')+T('EUR/USD',eu?n(eu.last,4):'–')+T('VIX',vx?n(vx.days[vx.days.length-1].value):'–');
