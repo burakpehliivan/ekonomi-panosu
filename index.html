@@ -47,6 +47,8 @@ td{padding:5px 0;border-top:1px solid var(--line)}td:first-child{color:var(--mut
 .cmp td{text-align:right;font-size:1.05rem}.cmp td:first-child{text-align:left;font-size:.88rem}
 .duo b.nu{font-size:1.15rem}.duo small{display:block;font-size:.72rem;color:var(--mut)}
 .d{margin:6px 0 0;font-weight:650;font-size:.92rem}.d small{font-weight:400;color:var(--mut);margin-left:6px;font-size:.74rem}
+.yo{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--bg);border-left:3px solid var(--a);font-size:.82rem;line-height:1.5}
+.yo p{margin:0 0 5px}.yo p:last-child{margin:0}.yo b{color:var(--ink)}
 .up{color:var(--bad)}.dn{color:var(--ok)}.nu{color:var(--acc)}
 .f{font-size:.71rem;color:var(--mut);margin:10px 0 0;line-height:1.45}.f a{color:inherit}
 .old{background:var(--warnbg);color:var(--warn);padding:0 4px;border-radius:3px}
@@ -78,11 +80,22 @@ function auto(D,k,lim,fn){const r=D.ind[k]||{label:k,url:'#'},[b,sig]=r.payload?
 const rows=a=>'<table>'+a.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join('')+'</table>';
 const duo=p=>`<div class="duo"><div><span>Alış</span><b>${n(p.buy,4)}</b></div><div><span>Satış</span><b>${n(p.sell,4)}</b></div></div>`;
 const dir={yukari:'yukarı',asagi:'aşağı',yatay:'yatay'};
+const yo=(what,now)=>`<div class="yo"><p><b>Nedir?</b> ${what}</p><p><b>Şu an:</b> ${now}</p></div>`;
+function spxYo(p){const A=Math.abs((p.ema9/p.ema14-1)*100),yon=p.cross&&p.cross.dir==='yukari'?'yukarı':'aşağı';
+ const st={yukselis:'EMA 9, EMA 14’ü yukarı kesti ve üzerinde kalıyor: kısa vadeli yükseliş eğilimi var, piyasanın ekonomiye dair beklentisi olumlu.',
+  dusus:'EMA 9, EMA 14’ü aşağı kesti ve altında kalıyor: kısa vadeli düşüş eğilimi var, piyasanın beklentisi temkinli.',
+  teyit_bekliyor:`Yeni bir ${yon} kesişim oldu ama yalnızca ${p.held}/${p.teyit_gun} işlem günüdür sürüyor: yön henüz teyit edilmedi, sinyal zayıf.`,
+  kesisim_yok:`Veri aralığında kesişim yok; EMA 9, EMA 14’ün ${p.above?'üstünde':'altında'}, mevcut yön sürüyor.`}[p.state];
+ return yo('ABD’nin en büyük 500 şirketinin hisse performansını ölçen referans endeks. Yön, 9 ve 14 günlük üstel ortalamaların (EMA) birbirine göre konumuyla okunur.',`Endeks ${n(p.price)} seviyesinde. ${st}${A<0.2?' Ortalamalar birbirine çok yakın, sinyal zayıf.':''}`)}
 function spx(p){const L={yukselis:['▲ Yükseliş eğilimi','ok'],dusus:['▼ Düşüş eğilimi','bad'],teyit_bekliyor:[`◆ Kesişim oldu, teyit bekliyor (${p.held}/${p.teyit_gun} gün)`,'warn'],kesisim_yok:['● Veri aralığında kesişim yok','']}[p.state];
  const x=c=>c?`${tr(c.date)}, ${dir[c.dir]} yönlü`:'yok',fark=p.ema9-p.ema14;
- return [`<p class="s">${L[0]}</p>`+rows([['EMA 9',n(p.ema9)],['EMA 14',n(p.ema14)],['Fark (9 − 14)',`<span class="${fark>0?'dn':'up'}">${ar(fark)} ${sg(fark)}</span>`],['Son kesişim',x(p.cross)],['Önceki kesişim',x(p.prev_cross)],['Fiyat verisi',p.freq+', '+p.n_obs+' gün']]),L[1]]}
-function vix(p){const d=p.days,c=p.direction==='yukari'?'var(--bad)':p.direction==='asagi'?'var(--ok)':'var(--acc)';
- return [`<p class="v">${n(d[d.length-1].value)}</p><p class="s">${ar(p.direction==='yukari'?1:p.direction==='asagi'?-1:0)} Son 5 işlem günü: ${dir[p.direction]} yönlü</p>`+spark(d.map(x=>x.value),c)+rows(d.map(x=>[tr(x.date),`${n(x.value)} <span class="${x.change>0?'up':x.change<0?'dn':'nu'}">${ar(x.change)} ${sg(x.change)}</span>`])),p.direction==='yukari'?'warn':'']}
+ return [`<p class="s">${L[0]}</p>`+rows([['EMA 9',n(p.ema9)],['EMA 14',n(p.ema14)],['Fark (9 − 14)',`<span class="${fark>0?'dn':'up'}">${ar(fark)} ${sg(fark)}</span>`],['Son kesişim',x(p.cross)],['Önceki kesişim',x(p.prev_cross)],['Fiyat verisi',p.freq+', '+p.n_obs+' gün']])+spxYo(p),L[1]]}
+function vixYo(p){const d=p.days,v=d[d.length-1].value,tot=v-(d[0].value-d[0].change),a=Math.abs(tot);
+ const lvl=v<20?'20’nin altında: piyasada huzur yüksek, risk iştahı güçlü.':v<=30?'20–30 aralığında: piyasalar sakin, risk iştahı korunuyor.':'30’un üzerinde: korku ve belirsizlik yüksek, fonlar genellikle dolar ve altına yönelir.';
+ const mv=a<0.5?'Son 5 işlem gününde belirgin bir değişim yok, algı sabit.':tot>0?`Son 5 işlem gününde ${n(a)} puan yükseldi: belirsizlik algısı artıyor, piyasa daha temkinli.${v<20?' Seviye hâlâ düşük bölgede.':''}`:`Son 5 işlem gününde ${n(a)} puan geriledi: belirsizlik algısı azalıyor, risk iştahı destekleniyor.`;
+ return yo('S&P 500 opsiyon fiyatlarından hesaplanan beklenen dalgalanma, yani “korku endeksi”. Yüksek değer korku ve belirsizliği gösterir.',`VIX ${n(v)}, ${lvl} ${mv}`)}
+function vix(p){const d=p.days,v=d[d.length-1].value,c=p.direction==='yukari'?'var(--bad)':p.direction==='asagi'?'var(--ok)':'var(--acc)';
+ return [`<p class="v">${n(v)}</p><p class="s">${ar(p.direction==='yukari'?1:p.direction==='asagi'?-1:0)} Son 5 işlem günü: ${dir[p.direction]} yönlü</p>`+spark(d.map(x=>x.value),c)+rows(d.map(x=>[tr(x.date),`${n(x.value)} <span class="${x.change>0?'up':x.change<0?'dn':'nu'}">${ar(x.change)} ${sg(x.change)}</span>`]))+vixYo(p),p.direction==='yukari'?'warn':'']}
 function eur(p){const r=p.recent,ch=(r[r.length-1][1]/r[0][1]-1)*100;
  return [`<p class="v">${n(p.last,4)}</p>`+spark(r.map(x=>x[1]),'var(--acc)')+rows([['Son 5 gün',`<span class="nu">${ar(ch)} ${sg(ch)}%</span>`],['Aralık',`${tr(r[0][0])} – ${tr(r[r.length-1][0])}`]]),'']}
 const sg4=x=>(x>0?'+':'')+n(x,4);
