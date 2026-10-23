@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-22T21:57:28+00:00",
+ "generated": "2026-10-23T12:37:52+00:00",
  "ind": {
   "fed": {
    "label": "FED hedef faiz aralığı",
@@ -11,8 +11,8 @@
     "previous_upper": 3.75,
     "since": "2026-09-17"
    },
-   "data_date": "2026-10-22",
-   "last_ok": "2026-10-22T21:57:19+00:00"
+   "data_date": "2026-10-23",
+   "last_ok": "2026-10-23T12:37:42+00:00"
   },
   "policy": {
    "label": "TCMB politika faizi (1 hafta repo)",
@@ -22,8 +22,8 @@
     "since": "2026-10-23",
     "previous": 37.0
    },
-   "data_date": "2026-10-22",
-   "last_ok": "2026-10-22T21:57:19+00:00",
+   "data_date": "2026-10-23",
+   "last_ok": "2026-10-23T12:37:42+00:00",
    "error": null
   },
   "ticari": {
@@ -36,7 +36,7 @@
     "previous_date": "2026-10-09"
    },
    "data_date": "2026-10-16",
-   "last_ok": "2026-10-22T21:57:19+00:00",
+   "last_ok": "2026-10-23T12:37:42+00:00",
    "error": null
   },
   "ihtiyac": {
@@ -49,7 +49,7 @@
     "previous_date": "2026-10-09"
    },
    "data_date": "2026-10-16",
-   "last_ok": "2026-10-22T21:57:19+00:00",
+   "last_ok": "2026-10-23T12:37:42+00:00",
    "error": null
   },
   "konut": {
@@ -62,18 +62,18 @@
     "previous_date": "2026-10-09"
    },
    "data_date": "2026-10-16",
-   "last_ok": "2026-10-22T21:57:19+00:00",
+   "last_ok": "2026-10-23T12:37:42+00:00",
    "error": null
   },
   "tcmb_usd": {
    "label": "TCMB USD kuru",
    "url": "https://www.tcmb.gov.tr/kurlar/today.xml",
    "payload": {
-    "buy": 49.5389,
-    "sell": 49.6281
+    "buy": 49.5647,
+    "sell": 49.654
    },
-   "data_date": "2026-10-22",
-   "last_ok": "2026-10-22T21:57:19+00:00",
+   "data_date": "2026-10-23",
+   "last_ok": "2026-10-23T12:37:42+00:00",
    "error": null
   },
   "eurusd": {
@@ -105,7 +105,7 @@
     ]
    },
    "data_date": "2026-10-22",
-   "last_ok": "2026-10-22T21:57:19+00:00",
+   "last_ok": "2026-10-23T12:37:42+00:00",
    "error": null
   },
   "vix": {
@@ -143,7 +143,7 @@
     "direction": "asagi"
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-22T21:57:19+00:00"
+   "last_ok": "2026-10-23T12:37:42+00:00"
   },
   "spx": {
    "label": "S&P 500 EMA 9/14",
@@ -170,18 +170,18 @@
     "freq": "günlük kapanış (FRED SP500)"
    },
    "data_date": "2026-10-21",
-   "last_ok": "2026-10-22T21:57:19+00:00"
+   "last_ok": "2026-10-23T12:37:42+00:00"
   },
   "kapalicarsi": {
    "label": "Harem Altın USD (Altınapi)",
    "url": "https://altinapi.com",
    "payload": {
-    "buy": 49.619,
-    "sell": 49.665,
-    "snapshot_utc": "2026-10-22T11:19+00:00"
+    "buy": 49.67,
+    "sell": 49.7201,
+    "snapshot_utc": "2026-10-23T12:37+00:00"
    },
-   "data_date": "2026-10-22",
-   "last_ok": "2026-10-22T11:19:45+00:00",
+   "data_date": "2026-10-23",
+   "last_ok": "2026-10-23T12:37:52+00:00",
    "error": null
   },
   "dth": {
@@ -225,13 +225,13 @@
     ]
    },
    "data_date": "2026-10-16",
-   "last_ok": "2026-10-22T21:57:19+00:00",
+   "last_ok": "2026-10-23T12:37:42+00:00",
    "error": null
   }
  },
  "meta": {
   "altin_requests": {
-   "2026-10": 2
+   "2026-10": 3
   }
  }
 }
