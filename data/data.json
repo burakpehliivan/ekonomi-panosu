@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-03T21:40:12+00:00",
+ "generated": "2026-11-04T15:26:00+00:00",
  "ind": {
   "fed": {
    "label": "FED hedef faiz aralığı",
@@ -11,8 +11,8 @@
     "previous_upper": 3.75,
     "since": "2026-09-17"
    },
-   "data_date": "2026-11-03",
-   "last_ok": "2026-11-03T21:39:44+00:00"
+   "data_date": "2026-11-04",
+   "last_ok": "2026-11-04T15:25:44+00:00"
   },
   "policy": {
    "label": "TCMB politika faizi (1 hafta repo)",
@@ -22,8 +22,8 @@
     "since": "2026-10-23",
     "previous": 37.0
    },
-   "data_date": "2026-11-03",
-   "last_ok": "2026-11-03T21:39:44+00:00",
+   "data_date": "2026-11-04",
+   "last_ok": "2026-11-04T15:25:44+00:00",
    "error": null
   },
   "ticari": {
@@ -36,7 +36,7 @@
     "previous_date": "2026-10-16"
    },
    "data_date": "2026-10-23",
-   "last_ok": "2026-11-03T21:39:44+00:00",
+   "last_ok": "2026-11-04T15:25:44+00:00",
    "error": null
   },
   "ihtiyac": {
@@ -49,7 +49,7 @@
     "previous_date": "2026-10-16"
    },
    "data_date": "2026-10-23",
-   "last_ok": "2026-11-03T21:39:44+00:00",
+   "last_ok": "2026-11-04T15:25:44+00:00",
    "error": null
   },
   "konut": {
@@ -62,30 +62,26 @@
     "previous_date": "2026-10-16"
    },
    "data_date": "2026-10-23",
-   "last_ok": "2026-11-03T21:39:44+00:00",
+   "last_ok": "2026-11-04T15:25:44+00:00",
    "error": null
   },
   "tcmb_usd": {
    "label": "TCMB USD kuru",
    "url": "https://www.tcmb.gov.tr/kurlar/today.xml",
    "payload": {
-    "buy": 49.9094,
-    "sell": 49.9993
+    "buy": 49.936,
+    "sell": 50.026
    },
-   "data_date": "2026-11-03",
-   "last_ok": "2026-11-03T21:39:44+00:00",
+   "data_date": "2026-11-04",
+   "last_ok": "2026-11-04T15:25:44+00:00",
    "error": null
   },
   "eurusd": {
    "label": "EUR/USD (ECB)",
    "url": "https://data-api.ecb.europa.eu",
    "payload": {
-    "last": 1.1179,
+    "last": 1.1267,
     "recent": [
-     [
-      "2026-10-28",
-      1.1133
-     ],
      [
       "2026-10-29",
       1.113
@@ -101,11 +97,15 @@
      [
       "2026-11-03",
       1.1179
+     ],
+     [
+      "2026-11-04",
+      1.1267
      ]
     ]
    },
-   "data_date": "2026-11-03",
-   "last_ok": "2026-11-03T21:39:44+00:00",
+   "data_date": "2026-11-04",
+   "last_ok": "2026-11-04T15:25:44+00:00",
    "error": null
   },
   "vix": {
@@ -114,11 +114,6 @@
    "error": null,
    "payload": {
     "days": [
-     {
-      "date": "2026-10-27",
-      "value": 17.52,
-      "change": -0.87
-     },
      {
       "date": "2026-10-28",
       "value": 16.91,
@@ -138,24 +133,29 @@
       "date": "2026-11-02",
       "value": 21.15,
       "change": 1.73
+     },
+     {
+      "date": "2026-11-03",
+      "value": 20.83,
+      "change": -0.32
      }
     ],
     "direction": "yukari"
    },
-   "data_date": "2026-11-02",
-   "last_ok": "2026-11-03T21:39:44+00:00"
+   "data_date": "2026-11-03",
+   "last_ok": "2026-11-04T15:25:44+00:00"
   },
   "spx": {
    "label": "S&P 500 EMA 9/14",
    "url": "https://fred.stlouisfed.org/series/SP500",
    "error": null,
    "payload": {
-    "price": 7541.4,
-    "ema9": 7656.549682075034,
-    "ema14": 7675.5803983547685,
+    "price": 7568.92,
+    "ema9": 7639.023745660028,
+    "ema14": 7661.359011907467,
     "above": false,
     "state": "dusus",
-    "held": 11,
+    "held": 12,
     "teyit_gun": 3,
     "cross": {
      "date": "2026-10-19",
@@ -166,22 +166,22 @@
      "dir": "yukari"
     },
     "n_obs": 400,
-    "first_date": "2025-04-01",
+    "first_date": "2025-04-02",
     "freq": "günlük kapanış (FRED SP500)"
    },
-   "data_date": "2026-11-02",
-   "last_ok": "2026-11-03T21:39:44+00:00"
+   "data_date": "2026-11-03",
+   "last_ok": "2026-11-04T15:25:44+00:00"
   },
   "kapalicarsi": {
    "label": "Harem Altın USD (Altınapi)",
    "url": "https://altinapi.com",
    "payload": {
-    "buy": 50.0701,
-    "sell": 50.1503,
-    "snapshot_utc": "2026-11-03T15:07+00:00"
+    "buy": 50.0857,
+    "sell": 50.1449,
+    "snapshot_utc": "2026-11-04T15:26+00:00"
    },
-   "data_date": "2026-11-03",
-   "last_ok": "2026-11-03T15:07:12+00:00",
+   "data_date": "2026-11-04",
+   "last_ok": "2026-11-04T15:26:00+00:00",
    "error": null
   },
   "dth": {
@@ -225,14 +225,14 @@
     ]
    },
    "data_date": "2026-10-23",
-   "last_ok": "2026-11-03T21:39:44+00:00",
+   "last_ok": "2026-11-04T15:25:44+00:00",
    "error": null
   }
  },
  "meta": {
   "altin_requests": {
    "2026-10": 8,
-   "2026-11": 2
+   "2026-11": 3
   }
  }
 }
