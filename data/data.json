@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-05T15:27:22+00:00",
+ "generated": "2026-11-05T20:38:15+00:00",
  "ind": {
   "fed": {
    "label": "FED hedef faiz aralığı",
@@ -12,7 +12,7 @@
     "since": "2026-09-17"
    },
    "data_date": "2026-11-05",
-   "last_ok": "2026-11-05T15:27:09+00:00"
+   "last_ok": "2026-11-05T20:38:02+00:00"
   },
   "policy": {
    "label": "TCMB politika faizi (1 hafta repo)",
@@ -23,7 +23,7 @@
     "previous": 37.0
    },
    "data_date": "2026-11-05",
-   "last_ok": "2026-11-05T15:27:09+00:00",
+   "last_ok": "2026-11-05T20:38:02+00:00",
    "error": null
   },
   "ticari": {
@@ -36,7 +36,7 @@
     "previous_date": "2026-10-23"
    },
    "data_date": "2026-10-30",
-   "last_ok": "2026-11-05T15:27:09+00:00",
+   "last_ok": "2026-11-05T20:38:02+00:00",
    "error": null
   },
   "ihtiyac": {
@@ -49,7 +49,7 @@
     "previous_date": "2026-10-23"
    },
    "data_date": "2026-10-30",
-   "last_ok": "2026-11-05T15:27:09+00:00",
+   "last_ok": "2026-11-05T20:38:02+00:00",
    "error": null
   },
   "konut": {
@@ -62,7 +62,7 @@
     "previous_date": "2026-10-23"
    },
    "data_date": "2026-10-30",
-   "last_ok": "2026-11-05T15:27:09+00:00",
+   "last_ok": "2026-11-05T20:38:02+00:00",
    "error": null
   },
   "tcmb_usd": {
@@ -73,7 +73,7 @@
     "sell": 50.0489
    },
    "data_date": "2026-11-05",
-   "last_ok": "2026-11-05T15:27:09+00:00",
+   "last_ok": "2026-11-05T20:38:02+00:00",
    "error": null
   },
   "eurusd": {
@@ -105,7 +105,7 @@
     ]
    },
    "data_date": "2026-11-05",
-   "last_ok": "2026-11-05T15:27:09+00:00",
+   "last_ok": "2026-11-05T20:38:02+00:00",
    "error": null
   },
   "vix": {
@@ -143,19 +143,19 @@
     "direction": "asagi"
    },
    "data_date": "2026-11-04",
-   "last_ok": "2026-11-05T15:27:09+00:00"
+   "last_ok": "2026-11-05T20:38:02+00:00"
   },
   "spx": {
    "label": "S&P 500 EMA 9/14",
    "url": "https://fred.stlouisfed.org/series/SP500",
    "error": null,
    "payload": {
-    "price": 7568.92,
-    "ema9": 7639.023745660028,
-    "ema14": 7661.359011907467,
+    "price": 7688.62,
+    "ema9": 7648.942996528023,
+    "ema14": 7664.993810319806,
     "above": false,
     "state": "dusus",
-    "held": 12,
+    "held": 13,
     "teyit_gun": 3,
     "cross": {
      "date": "2026-10-19",
@@ -166,11 +166,11 @@
      "dir": "yukari"
     },
     "n_obs": 400,
-    "first_date": "2025-04-02",
+    "first_date": "2025-04-03",
     "freq": "günlük kapanış (FRED SP500)"
    },
-   "data_date": "2026-11-03",
-   "last_ok": "2026-11-05T15:27:09+00:00"
+   "data_date": "2026-11-04",
+   "last_ok": "2026-11-05T20:38:02+00:00"
   },
   "kapalicarsi": {
    "label": "Harem Altın USD (Altınapi)",
@@ -225,7 +225,7 @@
     ]
    },
    "data_date": "2026-10-30",
-   "last_ok": "2026-11-05T15:27:09+00:00",
+   "last_ok": "2026-11-05T20:38:02+00:00",
    "error": null
   }
  },
