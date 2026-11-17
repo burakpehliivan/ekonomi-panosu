@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17T00:08:53+00:00",
+ "generated": "2026-11-17T16:53:17+00:00",
  "ind": {
   "fed": {
    "label": "FED hedef faiz aralığı",
@@ -11,8 +11,8 @@
     "previous_upper": 3.75,
     "since": "2026-09-17"
    },
-   "data_date": "2026-11-16",
-   "last_ok": "2026-11-17T00:08:38+00:00"
+   "data_date": "2026-11-17",
+   "last_ok": "2026-11-17T16:52:54+00:00"
   },
   "policy": {
    "label": "TCMB politika faizi (1 hafta repo)",
@@ -23,7 +23,7 @@
     "previous": 37.0
    },
    "data_date": "2026-11-17",
-   "last_ok": "2026-11-17T00:08:38+00:00",
+   "last_ok": "2026-11-17T16:52:54+00:00",
    "error": null
   },
   "ticari": {
@@ -36,7 +36,7 @@
     "previous_date": "2026-10-30"
    },
    "data_date": "2026-11-06",
-   "last_ok": "2026-11-17T00:08:38+00:00",
+   "last_ok": "2026-11-17T16:52:54+00:00",
    "error": null
   },
   "ihtiyac": {
@@ -49,7 +49,7 @@
     "previous_date": "2026-10-30"
    },
    "data_date": "2026-11-06",
-   "last_ok": "2026-11-17T00:08:38+00:00",
+   "last_ok": "2026-11-17T16:52:54+00:00",
    "error": null
   },
   "konut": {
@@ -62,30 +62,26 @@
     "previous_date": "2026-10-30"
    },
    "data_date": "2026-11-06",
-   "last_ok": "2026-11-17T00:08:38+00:00",
+   "last_ok": "2026-11-17T16:52:54+00:00",
    "error": null
   },
   "tcmb_usd": {
    "label": "TCMB USD kuru",
    "url": "https://www.tcmb.gov.tr/kurlar/today.xml",
    "payload": {
-    "buy": 50.3036,
-    "sell": 50.3942
+    "buy": 50.3292,
+    "sell": 50.4199
    },
-   "data_date": "2026-11-16",
-   "last_ok": "2026-11-17T00:08:38+00:00",
+   "data_date": "2026-11-17",
+   "last_ok": "2026-11-17T16:52:54+00:00",
    "error": null
   },
   "eurusd": {
    "label": "EUR/USD (ECB)",
    "url": "https://data-api.ecb.europa.eu",
    "payload": {
-    "last": 1.1014,
+    "last": 1.0989,
     "recent": [
-     [
-      "2026-11-10",
-      1.1214
-     ],
      [
       "2026-11-11",
       1.1127
@@ -101,11 +97,15 @@
      [
       "2026-11-16",
       1.1014
+     ],
+     [
+      "2026-11-17",
+      1.0989
      ]
     ]
    },
-   "data_date": "2026-11-16",
-   "last_ok": "2026-11-17T00:08:38+00:00",
+   "data_date": "2026-11-17",
+   "last_ok": "2026-11-17T16:52:54+00:00",
    "error": null
   },
   "vix": {
@@ -114,11 +114,6 @@
    "error": null,
    "payload": {
     "days": [
-     {
-      "date": "2026-11-09",
-      "value": 19.92,
-      "change": -5.72
-     },
      {
       "date": "2026-11-10",
       "value": 19.46,
@@ -138,24 +133,29 @@
       "date": "2026-11-13",
       "value": 19.3,
       "change": 0.6
+     },
+     {
+      "date": "2026-11-16",
+      "value": 22.91,
+      "change": 3.61
      }
     ],
-    "direction": "asagi"
+    "direction": "yukari"
    },
-   "data_date": "2026-11-13",
-   "last_ok": "2026-11-17T00:08:38+00:00"
+   "data_date": "2026-11-16",
+   "last_ok": "2026-11-17T16:52:54+00:00"
   },
   "spx": {
    "label": "S&P 500 EMA 9/14",
    "url": "https://fred.stlouisfed.org/series/SP500",
    "error": null,
    "payload": {
-    "price": 7561.67,
-    "ema9": 7564.129703489475,
-    "ema14": 7580.7311441897,
+    "price": 7416.59,
+    "ema9": 7534.62176279158,
+    "ema14": 7558.84565829774,
     "above": false,
     "state": "dusus",
-    "held": 20,
+    "held": 21,
     "teyit_gun": 3,
     "cross": {
      "date": "2026-10-19",
@@ -165,12 +165,12 @@
      "date": "2026-09-21",
      "dir": "yukari"
     },
-    "n_obs": 400,
-    "first_date": "2025-04-14",
+    "n_obs": 251,
+    "first_date": "2025-11-17",
     "freq": "günlük kapanış (FRED SP500)"
    },
-   "data_date": "2026-11-13",
-   "last_ok": "2026-11-17T00:08:38+00:00"
+   "data_date": "2026-11-16",
+   "last_ok": "2026-11-17T16:52:54+00:00"
   },
   "kapalicarsi": {
    "label": "Harem Altın USD (Altınapi)",
@@ -225,7 +225,7 @@
     ]
    },
    "data_date": "2026-11-06",
-   "last_ok": "2026-11-17T00:08:38+00:00",
+   "last_ok": "2026-11-17T16:52:54+00:00",
    "error": null
   }
  },
