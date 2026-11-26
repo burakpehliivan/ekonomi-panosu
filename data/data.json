@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-26T00:08:49+00:00",
+ "generated": "2026-11-26T17:42:56+00:00",
  "ind": {
   "fed": {
    "label": "FED hedef faiz aralığı",
@@ -11,8 +11,8 @@
     "previous_upper": 3.75,
     "since": "2026-09-17"
    },
-   "data_date": "2026-11-25",
-   "last_ok": "2026-11-26T00:08:34+00:00"
+   "data_date": "2026-11-26",
+   "last_ok": "2026-11-26T17:42:42+00:00"
   },
   "policy": {
    "label": "TCMB politika faizi (1 hafta repo)",
@@ -23,69 +23,65 @@
     "previous": 37.0
    },
    "data_date": "2026-11-26",
-   "last_ok": "2026-11-26T00:08:34+00:00",
+   "last_ok": "2026-11-26T17:42:42+00:00",
    "error": null
   },
   "ticari": {
    "label": "Ticari kredi faizi",
    "url": "https://evds3.tcmb.gov.tr",
    "payload": {
-    "value": 48.99,
+    "value": 51.73,
     "series": "TP.KTF17",
-    "previous": 53.07,
-    "previous_date": "2026-11-06"
+    "previous": 48.99,
+    "previous_date": "2026-11-13"
    },
-   "data_date": "2026-11-13",
-   "last_ok": "2026-11-26T00:08:34+00:00",
+   "data_date": "2026-11-20",
+   "last_ok": "2026-11-26T17:42:42+00:00",
    "error": null
   },
   "ihtiyac": {
    "label": "İhtiyaç kredisi faizi",
    "url": "https://evds3.tcmb.gov.tr",
    "payload": {
-    "value": 60.01,
+    "value": 59.26,
     "series": "TP.KTF10",
-    "previous": 59.2,
-    "previous_date": "2026-11-06"
+    "previous": 60.01,
+    "previous_date": "2026-11-13"
    },
-   "data_date": "2026-11-13",
-   "last_ok": "2026-11-26T00:08:34+00:00",
+   "data_date": "2026-11-20",
+   "last_ok": "2026-11-26T17:42:42+00:00",
    "error": null
   },
   "konut": {
    "label": "Konut kredisi faizi",
    "url": "https://evds3.tcmb.gov.tr",
    "payload": {
-    "value": 41.35,
+    "value": 41.4,
     "series": "TP.KTF12",
-    "previous": 41.33,
-    "previous_date": "2026-11-06"
+    "previous": 41.35,
+    "previous_date": "2026-11-13"
    },
-   "data_date": "2026-11-13",
-   "last_ok": "2026-11-26T00:08:34+00:00",
+   "data_date": "2026-11-20",
+   "last_ok": "2026-11-26T17:42:42+00:00",
    "error": null
   },
   "tcmb_usd": {
    "label": "TCMB USD kuru",
    "url": "https://www.tcmb.gov.tr/kurlar/today.xml",
    "payload": {
-    "buy": 50.5531,
-    "sell": 50.6441
+    "buy": 50.5866,
+    "sell": 50.6777
    },
-   "data_date": "2026-11-25",
-   "last_ok": "2026-11-26T00:08:34+00:00",
+   "data_date": "2026-11-26",
+   "last_ok": "2026-11-26T17:42:42+00:00",
    "error": null
   },
   "eurusd": {
    "label": "EUR/USD (ECB)",
    "url": "https://data-api.ecb.europa.eu",
    "payload": {
-    "last": 1.0935,
+    "last": 1.0975,
     "recent": [
-     [
-      "2026-11-19",
-      1.0992
-     ],
      [
       "2026-11-20",
       1.099
@@ -101,11 +97,15 @@
      [
       "2026-11-25",
       1.0935
+     ],
+     [
+      "2026-11-26",
+      1.0975
      ]
     ]
    },
-   "data_date": "2026-11-25",
-   "last_ok": "2026-11-26T00:08:34+00:00",
+   "data_date": "2026-11-26",
+   "last_ok": "2026-11-26T17:42:42+00:00",
    "error": null
   },
   "vix": {
@@ -143,7 +143,7 @@
     "direction": "yukari"
    },
    "data_date": "2026-11-24",
-   "last_ok": "2026-11-26T00:08:34+00:00"
+   "last_ok": "2026-11-26T17:42:42+00:00"
   },
   "spx": {
    "label": "S&P 500 EMA 9/14",
@@ -170,7 +170,7 @@
     "freq": "günlük kapanış (FRED SP500)"
    },
    "data_date": "2026-11-24",
-   "last_ok": "2026-11-26T00:08:34+00:00"
+   "last_ok": "2026-11-26T17:42:42+00:00"
   },
   "kapalicarsi": {
    "label": "Harem Altın USD (Altınapi)",
@@ -189,43 +189,43 @@
    "url": "https://www.tcmb.gov.tr/wps/wcm/connect/173b7dec-d6c6-4727-9f51-82e0f4138560/Para_Banka.pdf?MOD=AJPERES",
    "payload": {
     "dates": [
+     "2026-11-20",
      "2026-11-13",
      "2026-11-06",
      "2026-10-30",
-     "2026-10-23",
-     "2026-10-16"
+     "2026-10-23"
     ],
     "total": [
+     222123,
      228642,
      227102,
      223807,
-     224498,
-     227566
+     224498
     ],
     "gercek": [
+     131760,
      136712,
      139851,
      137585,
-     138596,
-     142211
+     138596
     ],
     "tuzel": [
+     90363,
      91930,
      87252,
      86222,
-     85901,
-     85355
+     85901
     ],
     "adj": [
+     -819,
      5162,
      1492,
      585,
-     223,
-     -848
+     223
     ]
    },
-   "data_date": "2026-11-13",
-   "last_ok": "2026-11-26T00:08:34+00:00",
+   "data_date": "2026-11-20",
+   "last_ok": "2026-11-26T17:42:42+00:00",
    "error": null
   }
  },
